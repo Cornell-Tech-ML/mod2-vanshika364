@@ -37,19 +37,17 @@ def index_to_position(index: Index, strides: Strides) -> int:
     storage based on strides.
 
     Args:
+    ----
         index : index tuple of ints
         strides : tensor strides
 
     Returns:
+    -------
         Position in storage
 
     """
     # TODO: Implement for Task 2.1.
-    pos = 0
-    for i in range(len(index)):
-        pos += index[i] * strides[i]
-    return pos
-    # raise NotImplementedError("Need to implement for Task 2.1")
+    return sum(x * y for x, y in zip(strides, index))
 
 
 def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
@@ -59,17 +57,16 @@ def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
     may not be the inverse of `index_to_position`.
 
     Args:
+    ----
         ordinal: ordinal position to convert.
         shape : tensor shape.
         out_index : return index corresponding to position.
 
     """
     # TODO: Implement for Task 2.1.
-    out_index.fill(0)
-    for i in range(len(shape) - 1, -1, -1):
-        out_index[i] = ordinal % shape[i]
-        ordinal //= shape[i]
-    # raise NotImplementedError("Need to implement for Task 2.1")
+    for dim in range(len(shape), 0, -1):
+        out_index[dim - 1] = ordinal % shape[dim - 1]
+        ordinal = ordinal // shape[dim - 1]
 
 
 def broadcast_index(
@@ -82,81 +79,54 @@ def broadcast_index(
     removed.
 
     Args:
+    ----
         big_index : multidimensional index of bigger tensor
         big_shape : tensor shape of bigger tensor
         shape : tensor shape of smaller tensor
         out_index : multidimensional index of smaller tensor
 
     Returns:
+    -------
         None
 
     """
     # TODO: Implement for Task 2.2.
-    out_index.fill(0)
-
-    # Determine the number of dimensions in both shapes
-    big_dims = len(big_shape)
-    small_dims = len(shape)
-
-    # Iterate over the dimensions in reverse order
-    for i in range(1, small_dims + 1):
-        big_dim_index = big_dims - i
-        
-        # If dimensions match, assign the index directly
-        if big_shape[big_dim_index] == shape[-i]:  
-            out_index[-i] = big_index[big_dim_index]
-        elif big_shape[big_dim_index] == 1:  # Handle broadcasting for size 1
-            out_index[-i] = 0  # Broadcast to 0
+    for i in range(len(shape)):
+        if shape[i] != 1:
+            out_index[i] = big_index[i + len(big_shape) - len(shape)]
         else:
-            # If dimensions are not compatible, set the out_index to zero
-            out_index[-i] = 0  
-
-    # Handle any additional dimensions in big_shape
-    for i in range(small_dims, big_dims):
-        if big_shape[i] == 1:
-            continue  # Ignore dimensions of size 1
-        out_index.insert(0, 0)  # Prepend 0 for non-broadcastable dimensions
-
-    # raise NotImplementedError("Need to implement for Task 2.2")
+            out_index[i] = 0
 
 
 def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
     """Broadcast two shapes to create a new union shape.
 
     Args:
+    ----
         shape1 : first shape
         shape2 : second shape
 
     Returns:
+    -------
         broadcasted shape
 
     Raises:
+    ------
         IndexingError : if cannot broadcast
 
     """
     # TODO: Implement for Task 2.2.
-    shape1 = list(reversed(shape1))
-    shape2 = list(reversed(shape2))
+    broadcasted_shape = []
+    if len(shape1) > len(shape2):
+        shape2 = [1 for i in range(len(shape1) - len(shape2))] + list(shape2)
+    else:
+        shape1 = [1 for i in range(len(shape2) - len(shape1))] + list(shape1)
+    for i in range(max(len(shape1), len(shape2))):
+        if (shape1[i] != 1) and (shape2[i] != 1) and (shape1[i] != shape2[i]):
+            raise IndexingError("Unable to Broadcast")
+        broadcasted_shape.append(max(shape1[i], shape2[i]))
 
-    # Result shape list
-    result_shape = []
-
-    # Iterate over the maximum length of both shapes
-    for dim1, dim2 in zip(shape1, shape2):
-        if dim1 == dim2:  # If dimensions match, use that size
-            result_shape.append(dim1)
-        elif dim1 == 1:  # If one shape has dimension size 1, use the other dimension
-            result_shape.append(dim2)
-        elif dim2 == 1:  # If the other shape has dimension size 1, use the first dimension
-            result_shape.append(dim1)
-        else:  # If dimensions are incompatible, raise an error
-            raise IndexingError(f"Cannot broadcast shapes {shape1} and {shape2}.")
-
-    
-    result_shape.extend(shape1[len(shape2):] or shape2[len(shape1):])
-    return tuple(reversed(result_shape))
-
-    # raise NotImplementedError("Need to implement for Task 2.2")
+    return tuple(broadcasted_shape)
 
 
 def strides_from_shape(shape: UserShape) -> UserStrides:
@@ -211,7 +181,8 @@ class TensorData:
     def is_contiguous(self) -> bool:
         """Check that the layout is contiguous, i.e. outer dimensions have bigger strides than inner dimensions.
 
-        Returns:
+        Returns
+        -------
             bool : True if contiguous
 
         """
@@ -275,9 +246,11 @@ class TensorData:
         """Permute the dimensions of the tensor.
 
         Args:
+        ----
             *order: a permutation of the dimensions
 
         Returns:
+        -------
             New `TensorData` with the same storage and a new dimension order.
 
         """
@@ -286,11 +259,9 @@ class TensorData:
         ), f"Must give a position to each dimension. Shape: {self.shape} Order: {order}"
 
         # TODO: Implement for Task 2.1.
-
-        new_shape = tuple(self.shape[i] for i in order)
-        new_strides = strides_from_shape(new_shape)
-        return TensorData(self._storage, new_shape, new_strides)
-        # raise NotImplementedError("Need to implement for Task 2.1")
+        shape_new = tuple([self.shape[i] for i in order])
+        strides_new = tuple([self.strides[i] for i in order])
+        return TensorData(self._storage, shape_new, strides_new)
 
     def to_string(self) -> str:
         """Convert to string"""

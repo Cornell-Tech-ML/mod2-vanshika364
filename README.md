@@ -20,7 +20,7 @@ The files that will be synced are:
 
 ---
 
-The model was trained on 4 different datasets:
+### The model was trained on 4 different datasets:
 - Simple
 - Diagonal
 - Split
@@ -28,9 +28,9 @@ The model was trained on 4 different datasets:
 
 ---
 
-Results of Model Training:
+### Results of Model Training:
 
-Simple Dataset
+### Simple Dataset
 Number of hidden layers: 3
 
 <img src="images/Screenshot 2024-10-22 at 5.28.54 PM.png" width="50%">
@@ -41,7 +41,7 @@ Number of hidden layers: 3
 
 ---
 
-Diagonal Dataset
+### Diagonal Dataset
 Size of hidden layers : 15
 
 <img src="images/diag.png" width="50%">
@@ -52,7 +52,7 @@ Size of hidden layers : 15
 
 ---
 
-Split Dataset
+### Split Dataset
 Size of hidden layers : 20
 
 <img src="images/Screenshot 2024-10-22 at 4.48.17 PM.png" width="50%">
@@ -63,7 +63,7 @@ Size of hidden layers : 20
 
 ---
 
-XOR Dataset
+### XOR Dataset
 Size of hidden layers : 25
 
 <img src="images/Screenshot 2024-10-22 at 5.24.26 PM.png" width="50%">

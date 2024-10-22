@@ -59,7 +59,7 @@ Size of hidden layers : 20
 XOR Dataset
 Size of hidden layers : 25
 <img src="images/Screenshot 2024-10-22 at 5.24.26 PM.png" width="50%">
- 
+
 <img src="images/Screenshot 2024-10-22 at 5.24.58 PM.png" width="50%">
 
 <img src="images/Screenshot 2024-10-22 at 5.25.47 PM.png" width="50%">

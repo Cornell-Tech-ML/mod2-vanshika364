@@ -93,21 +93,20 @@ class Tensor:
             self.name = str(self.unique_id)
 
         self.f = backend
-    
+
     def requires_grad_(self, x: bool) -> None:
         """Sets whether gradients should be tracked for this parameter."""
         self.history = History()
 
     def requires_grad(self) -> bool:
         """Checks if gradients are being tracked for this parameter.
-    
+
         Returns
         -------
           bool: True if gradients are tracked, False otherwise.
 
         """
         return self.history is not None
-
 
     def to_numpy(self) -> npt.NDArray[np.float64]:
         """Returns
@@ -124,14 +123,15 @@ class Tensor:
             b._type_(self.backend)
             c = b
         return c
-    
+
     def item(self) -> float:
         """Convert a 1-element tensor to a float.
 
-        Returns:
+        Returns
         -------
         x : float
             The value of the tensor as a float.
+
         """
         assert self.size == 1
         x: float = self._tensor._storage[0]
@@ -140,18 +140,20 @@ class Tensor:
     def contiguous(self) -> Tensor:
         """Return a contiguous tensor with the same data.
 
-        Returns:
+        Returns
         -------
         Tensor : A new contiguous tensor with the same data.
+
         """
         return Copy.apply(self)
 
     def __repr__(self) -> str:
         """String representation of the tensor.
 
-        Returns:
+        Returns
         -------
         str : A string representation of the tensor's data.
+
         """
         return self._tensor.to_string()
 
@@ -166,6 +168,7 @@ class Tensor:
         Returns:
         -------
         float : The value at the specified index.
+
         """
         key2 = (key,) if isinstance(key, int) else key
         return self._tensor.get(key2)
@@ -179,6 +182,7 @@ class Tensor:
             Index or tuple of indices for accessing the tensor.
         val : float
             The value to set at the specified index.
+
         """
         key2 = (key,) if isinstance(key, int) else key
         self._tensor.set(key2, val)
@@ -190,6 +194,7 @@ class Tensor:
         ----
         backend : TensorBackend
             The backend to assign for the tensor operations.
+
         """
         self.backend = backend
         if backend.cuda:  # pragma: no cover
@@ -206,9 +211,9 @@ class Tensor:
         Returns:
         -------
         Tensor : A new tensor with the same backend.
+
         """
         return Tensor(tensor_data, backend=self.backend)
-
 
     @staticmethod
     def make(

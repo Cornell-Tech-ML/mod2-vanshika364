@@ -479,5 +479,5 @@ but was expecting derivative %f from central difference.
             check,
             1e-2,
             1e-2,
-            err_msg=err_msg % (f, vals, x.grad[ind], i, ind, check),       
+            err_msg=err_msg % (f, vals, x.grad[ind], i, ind, check),
         )

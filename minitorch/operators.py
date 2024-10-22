@@ -191,7 +191,9 @@ def relu(x: float) -> float:
     """
     return x if x > 0 else 0.0
 
+
 EPS = 1e-6
+
 
 def log(x: float) -> float:
     """Compute the natural logarithm of a floating-point number.
@@ -317,6 +319,7 @@ def map(fn: Callable[[float], float]) -> Callable[[Iterable[float]], Iterable[fl
         List[float]: A list with the function applied to each element.
 
     """
+
     def _map(ls: Iterable[float]) -> Iterable[float]:
         ret = []
         for x in ls:
@@ -325,9 +328,10 @@ def map(fn: Callable[[float], float]) -> Callable[[Iterable[float]], Iterable[fl
 
     return _map
 
+
 def zipWith(
-    fn: Callable[[float, float], float]) -> Callable[[Iterable[float], 
-                                                      Iterable[float]], Iterable[float]]: # type: ignore
+    fn: Callable[[float, float], float],
+) -> Callable[[Iterable[float], Iterable[float]], Iterable[float]]:  # type: ignore
     """Combine elements from two iterables using a function.
 
     Args:
@@ -339,24 +343,26 @@ def zipWith(
         List[float]: A list with the function applied to corresponding elements.
 
     """
-    def _zipWith(ls1:Iterable[float], ls2: Iterable[float]) -> Iterable[float]:
+
+    def _zipWith(ls1: Iterable[float], ls2: Iterable[float]) -> Iterable[float]:
         ret = []
-        for x,y in zip(ls1, ls2):
-            ret.append(fn(x,y))
+        for x, y in zip(ls1, ls2):
+            ret.append(fn(x, y))
         return ret
 
     return _zipWith
 
 
 def reduce(
-    fn: Callable[[float, float], float], start: float) -> Callable[[Iterable[float]], float]:
+    fn: Callable[[float, float], float], start: float
+) -> Callable[[Iterable[float]], float]:
     """Reduce an iterable to a single value using a function and a starting value.
 
     Args:
     ----
         fn (Callable[[float, float], float]): The function to apply to combine elements.
         start (float): The initial value to start the reduction.
-    
+
     Returns:
     -------
         Callable[[Iterable[float]], float]: A function that applies the reduction to an iterable.
@@ -367,20 +373,20 @@ def reduce(
     Args:
     ----
         ls (Iterable[float]): The iterable of elements to be reduced.
-        
+
     Returns:
     -------
         float: The result of reducing the iterable to a single value using the provided function.
 
     """
+
     def _reduce(ls: Iterable[float]) -> float:
         val = start
         for l in ls:
             val = fn(val, l)
         return val
-    
-    return _reduce
 
+    return _reduce
 
 
 def negList(ls: Iterable[float]) -> Iterable[float]:

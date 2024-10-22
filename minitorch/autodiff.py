@@ -83,7 +83,7 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     order: List[Variable] = []
     seen = set()
 
-    def visit(var : Variable) -> None:
+    def visit(var: Variable) -> None:
         if var.unique_id in seen or var.is_constant():
             return
         if not var.is_leaf():
@@ -92,8 +92,10 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
                     visit(m)
         seen.add(var.unique_id)
         order.insert(0, var)
+
     visit(variable)
     return order
+
 
 def backpropagate(variable: Variable, deriv: Any) -> None:
     """Runs backpropagation on the computation graph to compute derivatives for the leaf nodes.

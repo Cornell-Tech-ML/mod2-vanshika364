@@ -4,6 +4,7 @@ from typing import Sequence
 from .module import Parameter
 from .scalar import Scalar
 
+
 class Optimizer:
     """Base class for optimizers."""
 

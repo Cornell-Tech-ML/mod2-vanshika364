@@ -59,7 +59,7 @@ Size of hidden layers : 20
 
 <img src="images/Screenshot 2024-10-22 at 4.48.43 PM.png" width="25%">
 
-<img src="images/Screenshot 2024-10-22 at 4.49.22 PM.pngg" width="50%">
+<img src="images/Screenshot 2024-10-22 at 4.49.22 PM.png" width="50%">
 
 ---
 

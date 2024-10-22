@@ -93,11 +93,10 @@ def broadcast_index(
     # TODO: Implement for Task 2.2.
     offset = len(big_shape) - len(shape)
     for i in range(len(shape)):
-        if shape[i] != 1:
-            out_index[i] = big_index[i + offset]
-        else:
+        if shape[i] == 1:
             out_index[i] = 0
-
+        else:
+            out_index[i] = big_index[i + offset]
 
 def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
     """Broadcast two shapes to create a new union shape.
@@ -117,7 +116,7 @@ def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
 
     """
     # TODO: Implement for Task 2.2.
-    b_shape = []
+    broadcasted_shape = []
     if len(shape1) > len(shape2):
         shape2 = [1 for i in range(len(shape1) - len(shape2))] + list(shape2)
     else:
@@ -125,9 +124,9 @@ def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
     for i in range(max(len(shape1), len(shape2))):
         if (shape1[i] != 1) and (shape2[i] != 1) and (shape1[i] != shape2[i]):
             raise IndexingError("Unable to Broadcast")
-        b_shape.append(max(shape1[i], shape2[i]))
+        broadcasted_shape.append(max(shape1[i], shape2[i]))
 
-    return tuple(b_shape)
+    return tuple(broadcasted_shape)
 
 
 def strides_from_shape(shape: UserShape) -> UserStrides:

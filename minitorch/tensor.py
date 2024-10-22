@@ -93,12 +93,21 @@ class Tensor:
             self.name = str(self.unique_id)
 
         self.f = backend
-
+    
     def requires_grad_(self, x: bool) -> None:
+        """Sets whether gradients should be tracked for this parameter."""
         self.history = History()
 
     def requires_grad(self) -> bool:
+        """Checks if gradients are being tracked for this parameter.
+    
+        Returns
+        -------
+          bool: True if gradients are tracked, False otherwise.
+
+        """
         return self.history is not None
+
 
     def to_numpy(self) -> npt.NDArray[np.float64]:
         """Returns
@@ -115,36 +124,91 @@ class Tensor:
             b._type_(self.backend)
             c = b
         return c
-
+    
     def item(self) -> float:
-        """Convert a 1-element tensor to a float"""
+        """Convert a 1-element tensor to a float.
+
+        Returns:
+        -------
+        x : float
+            The value of the tensor as a float.
+        """
         assert self.size == 1
         x: float = self._tensor._storage[0]
         return x
 
     def contiguous(self) -> Tensor:
-        """Return a contiguous tensor with the same data"""
+        """Return a contiguous tensor with the same data.
+
+        Returns:
+        -------
+        Tensor : A new contiguous tensor with the same data.
+        """
         return Copy.apply(self)
 
     def __repr__(self) -> str:
+        """String representation of the tensor.
+
+        Returns:
+        -------
+        str : A string representation of the tensor's data.
+        """
         return self._tensor.to_string()
 
     def __getitem__(self, key: Union[int, UserIndex]) -> float:
+        """Retrieve a value from the tensor at the specified index.
+
+        Args:
+        ----
+        key : Union[int, UserIndex]
+            Index or tuple of indices for accessing the tensor.
+
+        Returns:
+        -------
+        float : The value at the specified index.
+        """
         key2 = (key,) if isinstance(key, int) else key
         return self._tensor.get(key2)
 
     def __setitem__(self, key: Union[int, UserIndex], val: float) -> None:
+        """Set a value in the tensor at the specified index.
+
+        Args:
+        ----
+        key : Union[int, UserIndex]
+            Index or tuple of indices for accessing the tensor.
+        val : float
+            The value to set at the specified index.
+        """
         key2 = (key,) if isinstance(key, int) else key
         self._tensor.set(key2, val)
 
-    # Internal methods used for autodiff.
     def _type_(self, backend: TensorBackend) -> None:
+        """Internal method to assign a backend to the tensor.
+
+        Args:
+        ----
+        backend : TensorBackend
+            The backend to assign for the tensor operations.
+        """
         self.backend = backend
         if backend.cuda:  # pragma: no cover
             self._tensor.to_cuda_()
 
     def _new(self, tensor_data: TensorData) -> Tensor:
+        """Internal method to create a new tensor with the same backend.
+
+        Args:
+        ----
+        tensor_data : TensorData
+            Data for the new tensor.
+
+        Returns:
+        -------
+        Tensor : A new tensor with the same backend.
+        """
         return Tensor(tensor_data, backend=self.backend)
+
 
     @staticmethod
     def make(
@@ -239,14 +303,17 @@ class Tensor:
         return self.history is not None and self.history.last_fn is None
 
     def is_constant(self) -> bool:
+        """Is constant"""
         return self.history is None
 
     @property
     def parents(self) -> Iterable[Variable]:
+        """Parents"""
         assert self.history is not None
         return self.history.inputs
 
     def chain_rule(self, d_output: Any) -> Iterable[Tuple[Variable, Any]]:
+        """Chain Rule"""
         h = self.history
         assert h is not None
         assert h.last_fn is not None
@@ -260,18 +327,22 @@ class Tensor:
         ]
 
     def backward(self, grad_output: Optional[Tensor] = None) -> None:
+        """Backward"""
         if grad_output is None:
             assert self.shape == (1,), "Must provide grad_output if non-scalar"
             grad_output = Tensor.make([1.0], (1,), backend=self.backend)
         backpropagate(self, grad_output)
 
     def __truediv__(self, b: TensorLike) -> Tensor:
+        """Truediv"""
         return Mul.apply(self, Inv.apply(self._ensure_tensor(b)))
 
     def __rtruediv__(self, b: TensorLike) -> Tensor:
+        """Rtruediv"""
         return Mul.apply(self._ensure_tensor(b), Inv.apply(self))
 
     def __matmul__(self, b: Tensor) -> Tensor:
+        """Matmuliplication"""
         """Not used until Module 3"""
         return MatMul.apply(self, b)
 
@@ -302,51 +373,66 @@ class Tensor:
     # Functions
     # TODO: Implement for Task 2.3.
     def __add__(self, b: TensorLike) -> Tensor:
+        """Addition"""
         return Add.apply(self, self._ensure_tensor(b))
 
     def __sub__(self, b: TensorLike) -> Tensor:
+        """Subtraction"""
         return Add.apply(self, -self._ensure_tensor(b))
 
     def __mul__(self, b: TensorLike) -> Tensor:
+        """Multiplication"""
         return Mul.apply(self, self._ensure_tensor(b))
 
     def __lt__(self, b: TensorLike) -> Tensor:
+        """Less than"""
         return LT.apply(self, self._ensure_tensor(b))
 
     def __eq__(self, b: TensorLike) -> Tensor:
+        """Equal to"""
         return EQ.apply(self, self._ensure_tensor(b))
 
     def __gt__(self, b: TensorLike) -> Tensor:
+        """Greater than"""
         return LT.apply(self._ensure_tensor(b), self)
 
     def __neg__(self) -> Tensor:
+        """Negation"""
         return Neg.apply(self)
 
     def __radd__(self, b: TensorLike) -> Tensor:
+        """R addition"""
         return self + b
 
     def __rmul__(self, b: TensorLike) -> Tensor:
+        """R multiplication"""
         return self * b
 
     def all(self, dim: Optional[int] = None) -> Tensor:
+        """All elements are true"""
         if dim is None:
             return All.apply(self.view(self.size), self._ensure_tensor(0))
         else:
             return All.apply(self, self._ensure_tensor(dim))
 
     def is_close(self, y: Tensor) -> Tensor:
+        """Elements are close"""
         return IsClose.apply(self, y)
 
     def sigmoid(self) -> Tensor:
+        """Element's sigmoid"""
         return Sigmoid.apply(self)
 
     def relu(self) -> Tensor:
+        """RelU"""
         return ReLU.apply(self)
 
     def log(self) -> Tensor:
+        """Log of elements"""
         return Log.apply(self)
 
     def exp(self) -> Tensor:
+        """Exponential"""
         return Exp.apply(self)
 
     def sum(self, dim: Optional[int] = None) -> Tensor:

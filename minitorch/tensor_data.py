@@ -47,7 +47,7 @@ def index_to_position(index: Index, strides: Strides) -> int:
 
     """
     # TODO: Implement for Task 2.1.
-    return sum(x * y for x, y in zip(strides, index))
+    return sum(i * s for i, s in zip(index, strides))
 
 
 def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
@@ -91,9 +91,10 @@ def broadcast_index(
 
     """
     # TODO: Implement for Task 2.2.
+    offset = len(big_shape) - len(shape)
     for i in range(len(shape)):
         if shape[i] != 1:
-            out_index[i] = big_index[i + len(big_shape) - len(shape)]
+            out_index[i] = big_index[i + offset]
         else:
             out_index[i] = 0
 
@@ -116,7 +117,7 @@ def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
 
     """
     # TODO: Implement for Task 2.2.
-    broadcasted_shape = []
+    b_shape = []
     if len(shape1) > len(shape2):
         shape2 = [1 for i in range(len(shape1) - len(shape2))] + list(shape2)
     else:
@@ -124,9 +125,9 @@ def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
     for i in range(max(len(shape1), len(shape2))):
         if (shape1[i] != 1) and (shape2[i] != 1) and (shape1[i] != shape2[i]):
             raise IndexingError("Unable to Broadcast")
-        broadcasted_shape.append(max(shape1[i], shape2[i]))
+        b_shape.append(max(shape1[i], shape2[i]))
 
-    return tuple(broadcasted_shape)
+    return tuple(b_shape)
 
 
 def strides_from_shape(shape: UserShape) -> UserStrides:
@@ -259,9 +260,9 @@ class TensorData:
         ), f"Must give a position to each dimension. Shape: {self.shape} Order: {order}"
 
         # TODO: Implement for Task 2.1.
-        shape_new = tuple([self.shape[i] for i in order])
-        strides_new = tuple([self.strides[i] for i in order])
-        return TensorData(self._storage, shape_new, strides_new)
+        new_sh = tuple([self.shape[i] for i in order])
+        new_st = tuple([self.strides[i] for i in order])
+        return TensorData(self._storage, new_sh, new_st)
 
     def to_string(self) -> str:
         """Convert to string"""

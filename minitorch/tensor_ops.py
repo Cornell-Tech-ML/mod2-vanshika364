@@ -202,6 +202,7 @@ class SimpleOps(TensorOps):
         Args:
         ----
             fn: function from two floats-to-float to apply
+            start (float): starting value for reduction
             a (:class:`TensorData`): tensor to reduce over
             dim (int): int of dim to reduce
 

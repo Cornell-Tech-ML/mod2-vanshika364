@@ -255,6 +255,7 @@ class IsClose(Function):
 class Permute(Function):
     @staticmethod
     def forward(ctx: Context, a: Tensor, order: Tensor) -> Tensor:
+        """Permute the dimensions"""
         # TODO: Implement for Task 2.3.
         re_order = [0] * len(list(order.to_numpy()))
         order_int = []
@@ -267,6 +268,7 @@ class Permute(Function):
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, float]:
+        """Permute gradients the dimensions"""
         # TODO: Implement for Task 2.4.
         (re_order,) = ctx.saved_values
         return grad_output._new(grad_output._tensor.permute(*re_order)), 0.0
@@ -275,6 +277,7 @@ class Permute(Function):
 class View(Function):
     @staticmethod
     def forward(ctx: Context, a: Tensor, shape: Tensor) -> Tensor:
+        """View of the tensor"""
         ctx.save_for_backward(a.shape)
         assert a._tensor.is_contiguous(), "Must be contiguous to view"
         shape2 = [int(shape[i]) for i in range(shape.size)]

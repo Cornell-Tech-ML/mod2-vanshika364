@@ -35,7 +35,8 @@ Number of hidden layers: 3
 <img src="images/Screenshot 2024-10-22 at 5.29.19 PM.png" width="50%">
 
 <img src="images/Screenshot 2024-10-22 at 5.29.51 PM.png" width="50%">
-----------------------------------------------
+
+--------------------------------------
 Diagonal Dataset
 Size of hidden layers : 15
 <img src="images/diag.png" width="50%">
@@ -43,8 +44,8 @@ Size of hidden layers : 15
 <img src="images/Screenshot 2024-10-22 at 4.28.21 PM.png" width="50%">
 
 <img src="images/Screenshot 2024-10-22 at 4.29.40 PM.png" width="50%">
--------------------------------------------------
 
+--------------------------------------
 Split Dataset
 Size of hidden layers : 20
 <img src="images/Screenshot 2024-10-22 at 4.48.17 PM.png" width="50%">
@@ -52,7 +53,8 @@ Size of hidden layers : 20
 <img src="images/Screenshot 2024-10-22 at 4.48.43 PM.png" width="50%">
 
 <img src="images/Screenshot 2024-10-22 at 4.49.22 PM.pngg" width="50%">
----------------------------------------------------------
+
+--------------------------------------
 
 XOR Dataset
 Size of hidden layers : 25

@@ -18,48 +18,56 @@ The files that will be synced are:
 
         minitorch/operators.py minitorch/module.py minitorch/autodiff.py minitorch/scalar.py minitorch/scalar_functions.py minitorch/module.py project/run_manual.py project/run_scalar.py project/datasets.py
 
-----------------------------------------------
+---
+
 The model was trained on 4 different datasets:
 - Simple
 - Diagonal
 - Split
 - XOR
 
---------------------------------------
+---
+
 Results of Model Training:
 
 Simple Dataset
 Number of hidden layers: 3
+
 <img src="images/Screenshot 2024-10-22 at 5.28.54 PM.png" width="50%">
 
 <img src="images/Screenshot 2024-10-22 at 5.29.19 PM.png" width="50%">
 
-<img src="images/Screenshot 2024-10-22 at 5.29.51 PM.png" width="50%">
+<img src="images/Screenshot 2024-10-22 at 5.29.51 PM.png" width="25%">
 
---------------------------------------
+---
+
 Diagonal Dataset
 Size of hidden layers : 15
+
 <img src="images/diag.png" width="50%">
 
 <img src="images/Screenshot 2024-10-22 at 4.28.21 PM.png" width="50%">
 
-<img src="images/Screenshot 2024-10-22 at 4.29.40 PM.png" width="50%">
+<img src="images/Screenshot 2024-10-22 at 4.29.40 PM.png" width="25%">
 
---------------------------------------
+---
+
 Split Dataset
 Size of hidden layers : 20
+
 <img src="images/Screenshot 2024-10-22 at 4.48.17 PM.png" width="50%">
 
-<img src="images/Screenshot 2024-10-22 at 4.48.43 PM.png" width="50%">
+<img src="images/Screenshot 2024-10-22 at 4.48.43 PM.png" width="25%">
 
 <img src="images/Screenshot 2024-10-22 at 4.49.22 PM.pngg" width="50%">
 
---------------------------------------
+---
 
 XOR Dataset
 Size of hidden layers : 25
+
 <img src="images/Screenshot 2024-10-22 at 5.24.26 PM.png" width="50%">
 
 <img src="images/Screenshot 2024-10-22 at 5.24.58 PM.png" width="50%">
 
-<img src="images/Screenshot 2024-10-22 at 5.25.47 PM.png" width="50%">
+<img src="images/Screenshot 2024-10-22 at 5.25.47 PM.png" width="25%">
